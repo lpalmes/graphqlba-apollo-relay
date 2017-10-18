@@ -1,0 +1,50 @@
+type Query {
+  allLinks(skip: Int, first: Int): [Link!]!
+  messages(first: Int): [Message!]!
+}
+
+type Mutation {
+  createLink(url: String!, description: String!): Link
+  createMessage(username: String!, message: String!): Message
+  voteLink(id: ID!): Link
+  deleteLink(id: ID!): Link
+}
+
+type Subscription {
+  Link(filter: LinkSubscriptionFilter): LinkSubscriptionPayload
+  Message: MessageSubscriptionPayload
+}
+
+type Link {
+  id: ID!
+  url: String!
+  description: String!
+  votes: Int!
+}
+
+type Message {
+  id: ID!
+  message: String!
+  username: String!
+  created: String!
+}
+
+input LinkSubscriptionFilter {
+  mutation_in: [_ModelMutationType!]
+}
+
+type LinkSubscriptionPayload {
+  mutation: _ModelMutationType!
+  node: Link
+}
+
+type MessageSubscriptionPayload {
+  mutation: _ModelMutationType!
+  node: Message
+}
+
+enum _ModelMutationType {
+  CREATED
+  UPDATED
+  DELETED
+}
