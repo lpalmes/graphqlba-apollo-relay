@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "flow-bin": "^0.56.0",
+    "flow-bin": "^0.57.3",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-relay": "^1.4.1",

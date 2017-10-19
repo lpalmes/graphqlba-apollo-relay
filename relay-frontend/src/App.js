@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component } from 'react'
 import { QueryRenderer, graphql } from 'react-relay'
 import './App.css'
@@ -9,11 +11,21 @@ import CreateLink from './mutations/CreateLink'
 import VoteLink from './mutations/VoteLink'
 import DeleteLink from './mutations/DeleteLink'
 
+import type { AppQueryResponse } from './__generated__/AppQuery.graphql'
+
 type Props = {
   environment: any,
 }
 
-class App extends Component<Props> {
+type State = {
+  hasUsername: boolean,
+  username: string,
+  message: string,
+  url: string,
+  description: string,
+}
+
+class App extends Component<Props, State> {
   state = {
     hasUsername: localStorage.getItem('username') ? true : false,
     username: localStorage.getItem('username') || '',
@@ -21,10 +33,13 @@ class App extends Component<Props> {
     url: '',
     description: '',
   }
+
+  chat: ?HTMLElement
+
   componentDidMount() {
     LinkSubscription(this.props.environment)
     MessageSubscription(this.props.environment, () => {
-      this.chat.scrollTop = 10000000000000000000000000000
+      if (this.chat) this.chat.scrollTop = 10000000000000000000000000000
     })
   }
 
@@ -42,11 +57,11 @@ class App extends Component<Props> {
     this.setState({ url: '', description: '' })
   }
 
-  voteLink = id => {
+  voteLink = (id: string) => {
     VoteLink(this.props.environment, id)
   }
 
-  deleteLink = id => {
+  deleteLink = (id: string) => {
     DeleteLink(this.props.environment, id)
   }
 
@@ -81,10 +96,15 @@ class App extends Component<Props> {
             }
           }
         `}
-        render={({ error, props }) => {
+        render={relayProps => {
+          const { error } = relayProps
+          const props: ?AppQueryResponse = relayProps.props
+
           if (error) {
             return <div>{error.message}</div>
-          } else if (props) {
+          }
+
+          if (props !== null && props !== undefined) {
             return (
               <div style={{ display: 'flex' }}>
                 <div
@@ -211,6 +231,7 @@ class App extends Component<Props> {
               </div>
             )
           }
+
           return <div>Loading</div>
         }}
       />
