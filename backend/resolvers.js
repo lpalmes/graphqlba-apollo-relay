@@ -3,7 +3,7 @@ module.exports = {
     allLinks: (root, { filter, first, skip }) => {
       return Object.values(links)
     },
-    messages: (root, { first }) => messages,
+    messages: (root, { first }) => messages
   },
 
   Mutation: {
@@ -18,7 +18,7 @@ module.exports = {
       const id = uuid()
       const newMessage = Object.assign({ id, created: new Date() }, data)
       pubsub.publish('Message', {
-        Message: { mutation: 'CREATED', node: newMessage },
+        Message: { mutation: 'CREATED', node: newMessage }
       })
       messages = [...messages, newMessage]
       return newMessage
@@ -27,7 +27,7 @@ module.exports = {
       const { id } = data
       links[id].votes = links[id].votes + 1
       pubsub.publish('Link', {
-        Link: { mutation: 'UPDATED', node: links[id] },
+        Link: { mutation: 'UPDATED', node: links[id] }
       })
       return links[id]
     },
@@ -36,18 +36,18 @@ module.exports = {
       const link = links[id]
       delete links[id]
       pubsub.publish('Link', {
-        Link: { mutation: 'DELETED', node: link },
+        Link: { mutation: 'DELETED', node: link }
       })
       return link
-    },
+    }
   },
 
   Subscription: {
     Link: {
-      subscribe: () => pubsub.asyncIterator('Link'),
+      subscribe: () => pubsub.asyncIterator('Link')
     },
     Message: {
-      subscribe: () => pubsub.asyncIterator('Message'),
-    },
-  },
+      subscribe: () => pubsub.asyncIterator('Message')
+    }
+  }
 }

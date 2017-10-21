@@ -19,7 +19,7 @@ const cors = require('cors')
 const pubsub = new PubSub()
 
 const schemaFile = fs.readFileSync('./schema.graphql', {
-  encoding: 'utf8',
+  encoding: 'utf8'
 })
 
 let links = {}
@@ -34,7 +34,7 @@ const start = async () => {
 
     const buildOptions = async (req, res) => {
       return {
-        schema,
+        schema
       }
     }
     app.use(cors())
@@ -47,15 +47,15 @@ const start = async () => {
       '/graphiql',
       graphiqlExpress({
         endpointURL: '/graphql',
-        subscriptionsEndpoint: `ws://localhost:${PORT}/subscriptions`,
-      }),
+        subscriptionsEndpoint: `ws://localhost:${PORT}/subscriptions`
+      })
     )
 
     const server = createServer(app)
     server.listen(PORT, () => {
       SubscriptionServer.create(
         { execute, subscribe, schema },
-        { server, path: '/subscriptions' },
+        { server, path: '/subscriptions' }
       )
       console.log(`Hackernews GraphQL server running on port ${PORT}.`)
     })
