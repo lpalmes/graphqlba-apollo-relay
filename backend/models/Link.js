@@ -12,8 +12,8 @@ class Link extends Model {
         relation: Model.HasManyRelation,
         modelClass: path.join(__dirname, '/Message'),
         join: {
-          from: 'messages.link_id',
-          to: 'links.id'
+          from: 'links.id',
+          to: 'messages.link_id'
         }
       }
     }
