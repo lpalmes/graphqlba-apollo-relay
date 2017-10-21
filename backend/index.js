@@ -6,25 +6,15 @@ const { graphqlExpress, graphiqlExpress } = require('apollo-server-express')
 const { execute, subscribe } = require('graphql')
 const { createServer } = require('http')
 const { SubscriptionServer } = require('subscriptions-transport-ws')
-const { formatError } = require('graphql')
 const { makeExecutableSchema } = require('graphql-tools')
-const { URL } = require('url')
 const resolvers = require('./resolvers')
-
-const { PubSub } = require('graphql-subscriptions')
-const uuid = require('uuid/v4')
+require('./db/setup')
 
 const cors = require('cors')
-
-const pubsub = new PubSub()
 
 const schemaFile = fs.readFileSync('./schema.graphql', {
   encoding: 'utf8'
 })
-
-let links = {}
-
-let messages = []
 
 const schema = makeExecutableSchema({ typeDefs: schemaFile, resolvers })
 
