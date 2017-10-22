@@ -8,7 +8,7 @@ const newLinkSubscription = graphql`
         id
         username
         message
-        created
+        createdAt
       }
     }
   }

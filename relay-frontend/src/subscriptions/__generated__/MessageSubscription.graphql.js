@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 1a6edebd2ca01f55d7c2670454124f06
+ * @relayHash f7f45a3a789312a0f32989b0a8a7ec00
  */
 
 /* eslint-disable */
@@ -17,7 +17,7 @@ export type MessageSubscriptionResponse = {|
       +id: string;
       +username: string;
       +message: string;
-      +created: string;
+      +createdAt: string;
     |};
   |};
 |};
@@ -32,7 +32,7 @@ subscription MessageSubscription {
       id
       username
       message
-      created
+      createdAt
     }
   }
 }
@@ -93,7 +93,7 @@ const batch /*: ConcreteBatch*/ = {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
-                "name": "created",
+                "name": "createdAt",
                 "storageKey": null
               }
             ],
@@ -163,7 +163,7 @@ const batch /*: ConcreteBatch*/ = {
                 "kind": "ScalarField",
                 "alias": null,
                 "args": null,
-                "name": "created",
+                "name": "createdAt",
                 "storageKey": null
               }
             ],
@@ -174,7 +174,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "subscription MessageSubscription {\n  Message {\n    mutation\n    node {\n      id\n      username\n      message\n      created\n    }\n  }\n}\n"
+  "text": "subscription MessageSubscription {\n  Message {\n    mutation\n    node {\n      id\n      username\n      message\n      createdAt\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

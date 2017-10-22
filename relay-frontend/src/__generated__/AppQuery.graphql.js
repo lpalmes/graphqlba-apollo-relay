@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash b5ee0aa3be7a1f9e1d0885f207438d3e
+ * @relayHash ab9ba54f034960da4299b3086882374f
  */
 
 /* eslint-disable */
@@ -20,7 +20,7 @@ export type AppQueryResponse = {|
     +id: string;
     +username: string;
     +message: string;
-    +created: string;
+    +createdAt: string;
   |}>;
 |};
 */
@@ -38,7 +38,7 @@ query AppQuery {
     id
     username
     message
-    created
+    createdAt
   }
 }
 */
@@ -122,7 +122,7 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "ScalarField",
             "alias": null,
             "args": null,
-            "name": "created",
+            "name": "createdAt",
             "storageKey": null
           }
         ],
@@ -213,7 +213,7 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "ScalarField",
             "alias": null,
             "args": null,
-            "name": "created",
+            "name": "createdAt",
             "storageKey": null
           }
         ],
@@ -221,7 +221,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query AppQuery {\n  allLinks {\n    id\n    url\n    description\n    votes\n  }\n  messages {\n    id\n    username\n    message\n    created\n  }\n}\n"
+  "text": "query AppQuery {\n  allLinks {\n    id\n    url\n    description\n    votes\n  }\n  messages {\n    id\n    username\n    message\n    createdAt\n  }\n}\n"
 };
 
 module.exports = batch;

@@ -92,7 +92,7 @@ class App extends Component<Props, State> {
               id
               username
               message
-              created
+              createdAt
             }
           }
         `}

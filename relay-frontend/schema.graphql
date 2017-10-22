@@ -24,7 +24,7 @@ type Message {
   id: ID!
   message: String!
   username: String!
-  created: String!
+  createdAt: String!
 }
 
 type MessageSubscriptionPayload {
