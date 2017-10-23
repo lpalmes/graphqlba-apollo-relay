@@ -6,7 +6,7 @@ const mutation = graphql`
       id
       message
       username
-      created
+      createdAt
     }
   }
 `

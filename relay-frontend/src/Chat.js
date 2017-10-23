@@ -86,10 +86,19 @@ class Chat extends Component<Props, State> {
           <button onClick={this.logout}>Logout</button>
           <div>
             {messages.map(message => (
-              <div key={message.id} style={{ padding: 5 }}>
+              <div
+                key={message.id}
+                style={{
+                  padding: 5,
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center'
+                }}
+              >
                 <Typography type="subheading" component="span">
                   {message.username}
                 </Typography>
+                <div style={{ marginLeft: 5 }} />
                 <Typography component="span">{message.message}</Typography>
               </div>
             ))}

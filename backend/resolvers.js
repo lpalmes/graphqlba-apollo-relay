@@ -72,6 +72,17 @@ module.exports = {
     createMessage: async (root, data) => {
       try {
         const id = uuid()
+
+        if (data.message === 'clear') {
+          const messages = await Message.query()
+          messages.forEach(message => {
+            pubsub.publish('Message', {
+              Message: { mutation: 'DELETED', node: message },
+            })
+          })
+
+          await Message.query().delete()
+        }
         let newMessage = Object.assign({ id, createdAt: new Date() }, data)
         pubsub.publish('Message', {
           Message: { mutation: 'CREATED', node: newMessage },
