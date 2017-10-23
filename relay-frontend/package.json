@@ -3,12 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "date-fns": "^1.29.0",
     "flow-bin": "^0.57.3",
+    "material-ui": "^1.0.0-beta.17",
+    "material-ui-icons": "^1.0.0-beta.17",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-relay": "^1.4.1",
     "relay-compiler": "^1.4.1",
-    "subscriptions-transport-ws": "0.8.3"
+    "subscriptions-transport-ws": "0.8.3",
+    "typeface-roboto": "^0.0.41"
   },
   "scripts": {
     "start": "react-scripts start",

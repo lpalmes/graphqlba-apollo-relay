@@ -3,79 +3,30 @@
 import React, { Component } from 'react'
 import { QueryRenderer, graphql } from 'react-relay'
 import './App.css'
+import AppBar from 'material-ui/AppBar'
+import Tabs, { Tab } from 'material-ui/Tabs'
 
-import LinkSubscription from './subscriptions/LinkSubscription'
-import MessageSubscription from './subscriptions/MessageSubscription'
-import CreateMessage from './mutations/CreateMessage'
-import CreateLink from './mutations/CreateLink'
-import VoteLink from './mutations/VoteLink'
-import DeleteLink from './mutations/DeleteLink'
+import News from './News'
+import Chat from './Chat'
 
 import type { AppQueryResponse } from './__generated__/AppQuery.graphql'
+import type { Environment } from 'react-relay'
 
 type Props = {
-  environment: any,
+  environment: Environment
 }
 
 type State = {
-  hasUsername: boolean,
-  username: string,
-  message: string,
-  url: string,
-  description: string,
+  tab: number
 }
 
 class App extends Component<Props, State> {
   state = {
-    hasUsername: localStorage.getItem('username') ? true : false,
-    username: localStorage.getItem('username') || '',
-    message: '',
-    url: '',
-    description: '',
-  }
-
-  chat: ?HTMLElement
-
-  componentDidMount() {
-    LinkSubscription(this.props.environment)
-    MessageSubscription(this.props.environment, () => {
-      if (this.chat) this.chat.scrollTop = 10000000000000000000000000000
-    })
-  }
-
-  sendMessage = () => {
-    CreateMessage(
-      this.props.environment,
-      this.state.username,
-      this.state.message,
-    )
-    this.setState({ message: '' })
-  }
-
-  createLink = () => {
-    CreateLink(this.props.environment, this.state.url, this.state.description)
-    this.setState({ url: '', description: '' })
-  }
-
-  voteLink = (id: string) => {
-    VoteLink(this.props.environment, id)
-  }
-
-  deleteLink = (id: string) => {
-    DeleteLink(this.props.environment, id)
-  }
-
-  login = () => {
-    this.setState({ hasUsername: true })
-    window.localStorage.setItem('username', this.state.username)
-  }
-
-  logout = () => {
-    localStorage.clear()
-    this.setState({ username: '', hasUsername: false })
+    tab: 0
   }
 
   render() {
+    const { tab } = this.state
     const { environment } = this.props
     return (
       <QueryRenderer
@@ -106,126 +57,26 @@ class App extends Component<Props, State> {
 
           if (props !== null && props !== undefined) {
             return (
-              <div style={{ display: 'flex' }}>
-                <div
-                  style={{
-                    flex: 1,
-                    overflow: 'auto',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    padding: 50,
-                  }}
-                >
-                  <h1>Noticias</h1>
-                  <div
-                    style={{
-                      overflowY: 'auto',
-                      width: '100%',
-                    }}
+              <div>
+                <AppBar position="fixed" color="default">
+                  <Tabs
+                    value={tab}
+                    onChange={(e, tab) => this.setState({ tab })}
+                    indicatorColor="primary"
+                    textColor="primary"
+                    scrollable
+                    scrollButtons="auto"
                   >
-                    {props.allLinks.map(link => (
-                      <div
-                        key={link.id}
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                          padding: 5,
-                        }}
-                      >
-                        <div>
-                          <a href={link.url}>
-                            <span>
-                              {link.description} ({link.url})
-                            </span>
-                          </a>
-                        </div>
-                        <div>
-                          <span>{link.votes}</span>
-                          <button onClick={() => this.voteLink(link.id)}>
-                            Votar
-                          </button>
-                          <button onClick={() => this.deleteLink(link.id)}>
-                            Borrar
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      marginTop: 20,
-                    }}
-                  >
-                    <input
-                      value={this.state.description}
-                      placeholder="Descripcion"
-                      onChange={e =>
-                        this.setState({ description: e.target.value })}
-                    />
-                    <input
-                      value={this.state.url}
-                      placeholder="url"
-                      onChange={e => this.setState({ url: e.target.value })}
-                    />
-                    <button onClick={this.createLink}>Crear</button>
-                  </div>
-                </div>
-                <div
-                  style={{
-                    flex: 1,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    padding: 50,
-                  }}
-                >
-                  {this.state.hasUsername === false ? (
-                    <div>
-                      <span>Ingrese un nombre de usuario</span>
-                      <input
-                        value={this.state.username}
-                        onKeyDown={e => {
-                          if (e.keyCode === 13) this.login()
-                        }}
-                        onChange={e =>
-                          this.setState({ username: e.target.value })}
-                      />
-                      <button onClick={this.login}>Confirmar</button>
-                    </div>
-                  ) : (
-                    <div>
-                      <h1>Chat</h1>
-                      <h2>{this.state.username}</h2>
-                      <button onClick={this.logout}>Logout</button>
-                      <div
-                        id="chat"
-                        style={{ overflowY: 'auto', flex: 1, height: 400 }}
-                        ref={ref => (this.chat = ref)}
-                      >
-                        {props.messages.map(message => (
-                          <div key={message.id} style={{ padding: 5 }}>
-                            <span>
-                              {message.username} {message.message}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                      <div style={{ display: 'flex' }}>
-                        <input
-                          value={this.state.message}
-                          placeholder="mensaje"
-                          style={{ flex: 1 }}
-                          onKeyDown={e => {
-                            if (e.keyCode === 13) this.sendMessage()
-                          }}
-                          onChange={e =>
-                            this.setState({ message: e.target.value })}
-                        />
-                        <button onClick={this.sendMessage}>Enviar</button>
-                      </div>
-                    </div>
+                    <Tab label="Noticias" />
+                    <Tab label="Chat" />
+                  </Tabs>
+                </AppBar>
+                <div style={{ paddingTop: 48 }}>
+                  {tab === 0 && (
+                    <News environment={environment} links={props.allLinks} />
+                  )}
+                  {tab === 1 && (
+                    <Chat environment={environment} messages={props.messages} />
                   )}
                 </div>
               </div>
