@@ -13,8 +13,8 @@ exports.seed = (knex, Promise) => {
               id: uuid(),
               url: casual.url,
               description: casual.sentence,
-              votes: casual.integer(0, 500),
-            },
+              votes: casual.integer(0, 500)
+            }
           ])
         })
 

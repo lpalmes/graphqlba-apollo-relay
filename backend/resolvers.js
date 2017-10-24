@@ -21,7 +21,7 @@ module.exports = {
       } catch (e) {
         console.error(e)
       }
-    },
+    }
   },
 
   Mutation: {
@@ -42,10 +42,10 @@ module.exports = {
         let link = await Link.query().where('id', id)
         link = link[0]
         link = await Link.query().updateAndFetchById(id, {
-          votes: link.votes + 1,
+          votes: link.votes + 1
         })
         pubsub.publish('Link', {
-          Link: { mutation: 'UPDATED', node: link },
+          Link: { mutation: 'UPDATED', node: link }
         })
         return link
       } catch (e) {
@@ -58,7 +58,7 @@ module.exports = {
         const links = await Link.query().where('id', id)
         const link = links[0]
         pubsub.publish('Link', {
-          Link: { mutation: 'DELETED', node: link },
+          Link: { mutation: 'DELETED', node: link }
         })
         await Link.query()
           .delete()
@@ -77,7 +77,7 @@ module.exports = {
           const messages = await Message.query()
           messages.forEach(message => {
             pubsub.publish('Message', {
-              Message: { mutation: 'DELETED', node: message },
+              Message: { mutation: 'DELETED', node: message }
             })
           })
 
@@ -85,22 +85,22 @@ module.exports = {
         }
         let newMessage = Object.assign({ id, createdAt: new Date() }, data)
         pubsub.publish('Message', {
-          Message: { mutation: 'CREATED', node: newMessage },
+          Message: { mutation: 'CREATED', node: newMessage }
         })
         newMessage = await Message.query().insert(newMessage)
         return newMessage
       } catch (e) {
         console.error(e)
       }
-    },
+    }
   },
 
   Subscription: {
     Link: {
-      subscribe: () => pubsub.asyncIterator('Link'),
+      subscribe: () => pubsub.asyncIterator('Link')
     },
     Message: {
-      subscribe: () => pubsub.asyncIterator('Message'),
-    },
-  },
+      subscribe: () => pubsub.asyncIterator('Message')
+    }
+  }
 }
