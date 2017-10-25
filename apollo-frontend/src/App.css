@@ -1,0 +1,47 @@
+.App-header {
+  background-color: #222;
+  height: 2em;
+  padding: 1em 1.5em;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+  margin: 0;
+}
+
+.wrapper {
+  display: flex;
+  padding: 1.5em;
+}
+
+.Links {
+  flex: 1;
+}
+
+.Link {
+  margin-bottom: 2em;
+}
+
+.Link h2, p {
+  margin: 0;
+}
+
+.Link .action-button {
+  cursor: pointer;
+  transition: all 0.15s ease-out;
+  display: inline-block;
+  margin-left: .5em;
+}
+
+.Link .action-button:hover {
+  transform: scale(1.2)
+}
+
+.Link .votes {
+  margin-top: .5em;
+}
+
+.Chat {
+  flex: .5;
+}
