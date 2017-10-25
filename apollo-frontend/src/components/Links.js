@@ -18,8 +18,8 @@ const Links = ({ data }) => {
   )
 }
 
-const AllLinks = gql`
-  query AllLink {
+export const AllLinksQuery = gql`
+  query AllLinks {
     allLinks {
       id
       url
@@ -29,4 +29,4 @@ const AllLinks = gql`
   }
 `
 
-export default graphql(AllLinks)(Links)
+export default graphql(AllLinksQuery)(Links)

@@ -20,10 +20,26 @@
 }
 
 .Link {
-  margin-bottom: 1em;
+  margin-bottom: 2em;
 }
+
 .Link h2, p {
   margin: 0;
+}
+
+.Link .action-button {
+  cursor: pointer;
+  transition: all 0.15s ease-out;
+  display: inline-block;
+  margin-left: .5em;
+}
+
+.Link .action-button:hover {
+  transform: scale(1.2)
+}
+
+.Link .votes {
+  margin-top: .5em;
 }
 
 .Chat {
