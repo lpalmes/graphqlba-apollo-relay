@@ -7,91 +7,68 @@ const pubsub = new PubSub()
 module.exports = {
   Query: {
     allLinks: async (root, { filter, first, skip }) => {
-      try {
-        const links = await Link.query()
-        return links
-      } catch (e) {
-        console.error(e)
-      }
+      const links = await Link.query()
+      return links
     },
     messages: async (root, { first }) => {
-      try {
-        const messages = await Message.query()
-        return messages
-      } catch (e) {
-        console.error(e)
-      }
+      const messages = await Message.query()
+      return messages
     }
   },
 
   Mutation: {
     createLink: async (root, data) => {
-      try {
-        const id = uuid()
-        let newLink = Object.assign({ id, votes: 0 }, data)
-        pubsub.publish('Link', { Link: { mutation: 'CREATED', node: newLink } })
-        newLink = await Link.query().insert(newLink)
-        return newLink
-      } catch (e) {
-        console.error(e)
-      }
+      const id = uuid()
+      let newLink = Object.assign({ id, votes: 0 }, data)
+      pubsub.publish('Link', { Link: { mutation: 'CREATED', node: newLink } })
+      newLink = await Link.query().insert(newLink)
+
+      return newLink
     },
     voteLink: async (root, data) => {
-      try {
-        const { id } = data
-        let link = await Link.query().where('id', id)
-        link = link[0]
-        link = await Link.query().updateAndFetchById(id, {
-          votes: link.votes + 1
-        })
-        pubsub.publish('Link', {
-          Link: { mutation: 'UPDATED', node: link }
-        })
-        return link
-      } catch (e) {
-        console.error(e)
-      }
+      const { id } = data
+      let link = await Link.query().where('id', id).first()
+      link = await Link.query().updateAndFetchById(id, {
+        votes: link.votes + 1
+      })
+      pubsub.publish('Link', {
+        Link: { mutation: 'UPDATED', node: link }
+      })
+
+      return link
     },
     deleteLink: async (root, data) => {
-      try {
-        const { id } = data
-        const links = await Link.query().where('id', id)
-        const link = links[0]
-        pubsub.publish('Link', {
-          Link: { mutation: 'DELETED', node: link }
-        })
-        await Link.query()
-          .delete()
-          .where('id', id)
+      const { id } = data
+      const link = await Link.query().where('id', id).first()
+      pubsub.publish('Link', {
+        Link: { mutation: 'DELETED', node: link }
+      })
+      await Link.query()
+        .delete()
+        .where('id', id)
 
-        return link
-      } catch (e) {
-        console.error(e)
-      }
+      return link
     },
     createMessage: async (root, data) => {
-      try {
-        const id = uuid()
+      const id = uuid()
 
-        if (data.message === 'clear') {
-          const messages = await Message.query()
-          messages.forEach(message => {
-            pubsub.publish('Message', {
-              Message: { mutation: 'DELETED', node: message }
-            })
+      if (data.message === 'clear') {
+        const messages = await Message.query()
+        messages.forEach(message => {
+          pubsub.publish('Message', {
+            Message: { mutation: 'DELETED', node: message }
           })
-
-          await Message.query().delete()
-        }
-        let newMessage = Object.assign({ id, createdAt: new Date() }, data)
-        pubsub.publish('Message', {
-          Message: { mutation: 'CREATED', node: newMessage }
         })
-        newMessage = await Message.query().insert(newMessage)
-        return newMessage
-      } catch (e) {
-        console.error(e)
+
+        await Message.query().delete()
       }
+      let newMessage = Object.assign({ id, createdAt: new Date() }, data)
+      pubsub.publish('Message', {
+        Message: { mutation: 'CREATED', node: newMessage }
+      })
+      newMessage = await Message.query().insert(newMessage)
+
+      return newMessage
     }
   },
 
