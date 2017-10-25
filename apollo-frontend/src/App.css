@@ -1,0 +1,30 @@
+.App-header {
+  background-color: #222;
+  height: 2em;
+  padding: 1em;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+  margin: 0;
+}
+
+.wrapper {
+  display: flex;
+}
+
+.Links {
+  flex: 1;
+}
+
+.Link {
+  margin-bottom: 1em;
+}
+.Link h2, p {
+  margin: 0;
+}
+
+.Chat {
+  flex: .5;
+}
