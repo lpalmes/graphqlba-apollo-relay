@@ -1,15 +1,32 @@
 import React from 'react'
+import Link from './Link'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
-const Link = () => (
-  <article className="Link">
-    <h2>www.domain.tld</h2>
-    <p>Descripcion</p>
-    <p>154 ❤️</p>
-  </article>
-)
+const Links = ({ data }) => {
+  if (data.loading) return 'Cargando'
 
-export default () => (
-  <section className="Links">
-    <Link />
-  </section>
-)
+  return (
+    <section className="Links">
+      {data.allLinks.map(link => (
+        <Link
+          key={link.id}
+          link={link}
+        />
+      ))}
+    </section>
+  )
+}
+
+const AllLinks = gql`
+  query AllLink {
+    allLinks {
+      id
+      url
+      description
+      votes
+    }
+  }
+`
+
+export default graphql(AllLinks)(Links)
